@@ -1,4 +1,6 @@
 class ArticlesController < ApplicationController
+  before_action :set_article, only: [:show, :edit, :update, :destroy]
+  
   def index
     @articles = Article.all
   end
@@ -39,6 +41,14 @@ class ArticlesController < ApplicationController
     end
   end
 
+  def destroy
+    @article = Article.find(params[:id])
+    if @article.destroy
+      flash[:success] = 'Article has been deleted'
+      redirect_to articles_path
+    end
+  end
+
   protected
     def resource_not_found
       message = "The article you are looking for could not be found"
@@ -49,5 +59,9 @@ class ArticlesController < ApplicationController
   private
     def article_params
       params.require(:article).permit(:title, :body)
+    end
+
+    def set_article
+
     end
 end
